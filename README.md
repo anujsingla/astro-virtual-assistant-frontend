@@ -16,7 +16,9 @@ For more detailed information about the virtual assistant and what it provides, 
 3. Navigate to the landing page (you're going to get a 404)
 4. You should be able to see it on the bottom right. To make changes to the position/alignment relative to the landing page, check out the landing page code.
 
-If you want to run your backend locally, use `USE_LOCAL_RASA=1 npm run start`.
+If you want to run your backend locally:
+- Virtual Assistant (Rasa): `USE_LOCAL_RASA=1 npm run start`
+- Multi-Agent System (MAS): `USE_LOCAL_MAS=1 npm run start`
 
 
 ### Static mode
@@ -117,12 +119,14 @@ Models.ASK_RED_HAT
 Models.RHEL_LIGHTSPEED
 Models.VA
 Models.OAI
+Models.MAS
 
 // Plain object (JavaScript-friendly)
 ModelValues.ASK_RED_HAT      // "Ask Red Hat"
 ModelValues.RHEL_LIGHTSPEED  // "RHEL Lightspeed"
 ModelValues.VA               // "Virtual Assistant"
 ModelValues.OAI              // "OpenShift assisted Installer"
+ModelValues.MAS              // "Multi-Agent System"
 ```
 
 ### Testing

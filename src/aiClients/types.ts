@@ -7,6 +7,7 @@ export enum Models {
   VA = 'Virtual Assistant',
   OAI = 'OpenShift assisted Installer',
   HCC_AI = 'HCC AI Assistant',
+  MAS = 'Multi-Agent System',
 }
 
 export interface WelcomeButton {

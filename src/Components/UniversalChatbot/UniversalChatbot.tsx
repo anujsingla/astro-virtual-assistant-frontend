@@ -142,7 +142,8 @@ function UniversalChatbot({ setOpen, currentModel, setCurrentModel, managers, di
                 ? undefined
                 : () => {
                     // TODO: figure out nice way to handle custom conversation creation flow
-                    currentModel === Models.ASK_RED_HAT && setShowNewConversationWarning(true);
+                    (currentModel === Models.ASK_RED_HAT || currentModel === Models.MAS) &&
+                      setShowNewConversationWarning(true);
                     manager?.handleNewChat?.(setConversationsDrawerOpened);
                   }
             }

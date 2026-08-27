@@ -7,8 +7,9 @@ import { useFlag } from '@unleash/proxy-client-react';
 import { Models, StateManagerConfiguration, UseManagerHook } from './types';
 import { MAS_ENABLED_FLAG } from './flags';
 import MASFooter from '../Components/MASClient/MASFooter';
+import MASMessageEntry from '../Components/MASClient/MASMessageEntry';
 
-const MAS_BLUEPRINT_ID = "f8604096-8cf5-42af-9a90-044b36bedbab";
+const MAS_BLUEPRINT_ID = "9629fbfd-b5c2-4c24-b1e2-21a66dca6da1";
 
 export function useMasAuthenticated() {
   // const flagEnabled = useFlag(MAS_ENABLED_FLAG);
@@ -82,6 +83,7 @@ function useMasClient(): UseManagerHook {
         'Interact with an AI-powered multi-agent system for complex tasks, workflows, and automated assistance.',
       stateManager,
       FooterComponent: MASFooter,
+      MessageEntryComponent: MASMessageEntry,
       docsUrl: '',
       isPreview: true,
       welcome: {

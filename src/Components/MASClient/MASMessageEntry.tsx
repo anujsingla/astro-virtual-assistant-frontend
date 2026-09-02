@@ -13,7 +13,6 @@ function MASMessageEntry({ message, avatar, isCompact }: { message: MessageType<
 
   return (
     <>
-      {activeAgents.length > 0 && <MASAgentStatusPanel activeAgents={activeAgents} />}
       <Message
         id={`message-${message.id}`}
         isMarkdownDisabled={message.role === 'user'}
@@ -25,6 +24,7 @@ function MASMessageEntry({ message, avatar, isCompact }: { message: MessageType<
         timestamp={messageDate}
         isCompact={isCompact}
       />
+      {message.role === 'bot' && <MASAgentStatusPanel activeAgents={activeAgents} />}
     </>
   );
 }

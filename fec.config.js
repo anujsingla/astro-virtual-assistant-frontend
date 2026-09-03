@@ -27,13 +27,6 @@ module.exports = {
   proxyVerbose: true,
   routes: getRoutes(),
   interceptChromeConfig: false,
-  // Local dev only: needed for npm link to resolve ai-client-common from this project's node_modules.
-  // Remove before merging — not needed when mas-client is installed from npm.
-  resolve: {
-    alias: {
-      '@redhat-cloud-services/ai-client-common': path.resolve(__dirname, 'node_modules/@redhat-cloud-services/ai-client-common'),
-    },
-  },
   moduleFederation: {
     exclude: ['react-router-dom'],
     shared: [

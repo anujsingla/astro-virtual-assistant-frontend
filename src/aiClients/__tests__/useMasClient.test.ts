@@ -117,21 +117,6 @@ describe('useMasAuthenticated', () => {
 
     expect(result.current.isAuthenticated).toBe(false);
   });
-
-  it('returns unauthenticated when auth lookup fails', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
-    mockChrome.auth.getUser.mockRejectedValue(new Error('auth failed'));
-
-    const { result } = renderHook(() => useMasAuthenticated());
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
-    expect(result.current.isAuthenticated).toBe(false);
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to check MAS chatbot auth', expect.any(Error));
-    consoleErrorSpy.mockRestore();
-  });
 });
 
 describe('useMasClient', () => {

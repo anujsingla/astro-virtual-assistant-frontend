@@ -12,8 +12,7 @@ import MASMessageEntry from '../Components/MASClient/MASMessageEntry';
 const MAS_BLUEPRINT_ID = "9629fbfd-b5c2-4c24-b1e2-21a66dca6da1";
 
 export function useMasAuthenticated() {
-  // const flagEnabled = useFlag(MAS_ENABLED_FLAG);
-  const flagEnabled = true;
+  const flagEnabled = useFlag(MAS_ENABLED_FLAG);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const chrome = useChrome();
@@ -51,11 +50,12 @@ export function useMasAuthenticated() {
 
 function useMasClient(): UseManagerHook {
   const { loading, isAuthenticated } = useMasAuthenticated();
+  const baseUrl = `${window.location.origin}/api/mas`;
   const chrome = useChrome();
 
   const manager = useMemo(() => {
     const client = new MASClient({
-      baseUrl: window.location.origin + '/api/mas',
+      baseUrl,
       blueprintId: MAS_BLUEPRINT_ID,
       fetchFunction: async (input, options) => {
         const token = await chrome.auth.getToken();
@@ -100,7 +100,7 @@ function useMasClient(): UseManagerHook {
       },
     };
     return configuration;
-  }, []);
+  }, [baseUrl]);
 
   if (loading) {
     return { manager: null, loading };

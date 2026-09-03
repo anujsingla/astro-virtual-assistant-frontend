@@ -155,7 +155,7 @@ describe('useMasClient', () => {
 
       expect(MASClient).toHaveBeenCalledWith(
         expect.objectContaining({
-          baseUrl: `${window.location.origin}/api/mas`,
+          baseUrl: 'https://mas-api-tag-ai--playground.apps.stc-ai-e1-pp.imap.p1.openshiftapps.com',
           blueprintId: '48d8d52a-edc3-474f-8630-d20160fc2082',
           fetchFunction: expect.any(Function),
         })

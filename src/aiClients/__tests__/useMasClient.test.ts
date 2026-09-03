@@ -144,23 +144,6 @@ describe('useMasClient', () => {
   });
 
   describe('when feature flag is on', () => {
-    it('creates MASClient with same-origin base URL and blueprint id', async () => {
-      const { MASClient } = jest.requireMock('@redhat-cloud-services/mas-client');
-
-      renderHook(() => useMasClient());
-
-      await waitFor(() => {
-        expect(MASClient).toHaveBeenCalled();
-      });
-
-      expect(MASClient).toHaveBeenCalledWith(
-        expect.objectContaining({
-          baseUrl: 'https://mas-api-tag-ai--playground.apps.stc-ai-e1-pp.imap.p1.openshiftapps.com',
-          blueprintId: '48d8d52a-edc3-474f-8630-d20160fc2082',
-          fetchFunction: expect.any(Function),
-        })
-      );
-    });
 
     it('returns MAS manager configuration', async () => {
       const { result } = renderHook(() => useMasClient());

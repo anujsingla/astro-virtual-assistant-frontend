@@ -7,7 +7,9 @@ import MASAgentStatusPanel from './MASAgentStatusPanel';
 import MAS_BOT_ICON from '../../assets/Ask_Red_Hat_OFFICIAL-whitebackground.svg';
 
 function MASMessageEntry({ message, avatar, isCompact }: { message: MessageType<MASAdditionalAttributes>; avatar: string; isCompact?: boolean }) {
-  const messageDate = `${message.date?.toLocaleDateString()} ${message.date?.toLocaleTimeString()}`;
+  const messageDate = message.date
+    ? `${message.date.toLocaleDateString()} ${message.date.toLocaleTimeString()}`
+    : '';
   const activeAgents = message.additionalAttributes?.activeAgents ?? [];
   const isStreaming = message.role === 'bot' && message.answer === '';
 
@@ -24,7 +26,9 @@ function MASMessageEntry({ message, avatar, isCompact }: { message: MessageType<
         timestamp={messageDate}
         isCompact={isCompact}
       />
-      {message.role === 'bot' && <MASAgentStatusPanel activeAgents={activeAgents} />}
+      {message.role === 'bot' && (
+        <MASAgentStatusPanel activeAgents={activeAgents} contentId={`mas-agent-panel-content-${message.id}`} />
+      )}
     </>
   );
 }

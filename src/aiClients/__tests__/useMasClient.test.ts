@@ -144,7 +144,6 @@ describe('useMasClient', () => {
   });
 
   describe('when feature flag is on', () => {
-
     it('returns MAS manager configuration', async () => {
       const { result } = renderHook(() => useMasClient());
 

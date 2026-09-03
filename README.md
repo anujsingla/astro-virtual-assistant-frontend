@@ -116,13 +116,13 @@ import { Models, ModelValues } from './utils/VirtualAssistantStateSingleton';
 Models.ASK_RED_HAT
 Models.RHEL_LIGHTSPEED
 Models.VA
-Models.OAI
+Models.HCC_AI
 
 // Plain object (JavaScript-friendly)
 ModelValues.ASK_RED_HAT      // "Ask Red Hat"
 ModelValues.RHEL_LIGHTSPEED  // "RHEL Lightspeed"
 ModelValues.VA               // "Virtual Assistant"
-ModelValues.OAI              // "OpenShift assisted Installer"
+ModelValues.HCC_AI           // "HCC AI Assistant"
 ```
 
 ### Testing

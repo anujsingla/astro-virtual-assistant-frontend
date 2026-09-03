@@ -50,7 +50,7 @@ export function useMasAuthenticated() {
 
 function useMasClient(): UseManagerHook {
   const { loading, isAuthenticated } = useMasAuthenticated();
-  const baseUrl = `${window.location.origin}/api/mas`;
+  const baseUrl = 'https://mas-api-tag-ai--playground.apps.stc-ai-e1-pp.imap.p1.openshiftapps.com';
   const chrome = useChrome();
 
   const manager = useMemo(() => {

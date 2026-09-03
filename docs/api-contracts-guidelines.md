@@ -20,7 +20,6 @@ UniversalChatbot (UI)
 | VA | Custom (`src/aiClients/vaClient.ts`) | `/api/virtual-assistant-v2/v2/talk` |
 | ARH | `@redhat-cloud-services/arh-client` | `https://access.redhat.com` (prod) / `access.stage.redhat.com` (stage) |
 | RHEL Lightspeed | `@redhat-cloud-services/rhel-lightspeed-client` | `window.location.origin + /api/lightspeed/v1` |
-| OAI | Loaded dynamically via Scalprum | Provided by `assistedInstallerApp` |
 
 ## StateManagerConfiguration
 
@@ -45,9 +44,9 @@ interface StateManagerConfiguration<T extends IAIClient> {
 Managers are registered in `src/aiClients/useStateManager.ts`. The **first** enabled manager becomes the default. Order matters:
 
 1. ARH (Ask Red Hat)
-2. RHEL Lightspeed
-3. VA (Virtual Assistant)
-4. OAI (OpenShift Assisted Installer) — dynamically loaded
+2. VA (Virtual Assistant)
+3. RHEL Lightspeed
+4. HCC AI
 
 When adding a new service, place it in the `stateManagers` array at the desired priority position.
 

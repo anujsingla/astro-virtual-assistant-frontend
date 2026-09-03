@@ -4,7 +4,7 @@ This document provides guidance for AI agents working in this repository. For Cl
 
 ## Project Overview
 
-**Chameleon** (astro-virtual-assistant-frontend) is a federated React application that provides a unified chatbot interface for multiple AI agents in Red Hat's Hybrid Cloud Console (HCC). It uses PatternFly 6, Scalprum (module federation), and a multi-client architecture to let users switch between AI services (Ask Red Hat, RHEL Lightspeed, Virtual Assistant, OpenShift Assisted Installer).
+**Chameleon** (astro-virtual-assistant-frontend) is a federated React application that provides a unified chatbot interface for multiple AI agents in Red Hat's Hybrid Cloud Console (HCC). It uses PatternFly 6, Scalprum (module federation), and a multi-client architecture to let users switch between AI services (Ask Red Hat, RHEL Lightspeed, Virtual Assistant, HCC AI).
 
 This is a **temporary solution** that will be replaced by a unified AI routing service. See [ONBOARDING_GUIDE.md](./ONBOARDING_GUIDE.md) for the full context.
 

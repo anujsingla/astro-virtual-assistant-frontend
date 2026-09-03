@@ -25,13 +25,7 @@ function AgentStatusIcon({ status }: { status: ActiveAgent['status'] }) {
   );
 }
 
-function MASAgentStatusPanel({
-  activeAgents,
-  contentId,
-}: {
-  activeAgents: ActiveAgent[];
-  contentId: string;
-}) {
+function MASAgentStatusPanel({ activeAgents, contentId }: { activeAgents: ActiveAgent[]; contentId: string }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const visibleAgents = activeAgents.filter((agent) => !EXCLUDED_AGENT_NAMES.has(agent.name.toLowerCase()));
@@ -52,12 +46,7 @@ function MASAgentStatusPanel({
 
   return (
     <div className="mas-agent-panel" aria-live="polite">
-      <button
-        className="mas-agent-panel__toggle"
-        onClick={() => setIsExpanded((prev) => !prev)}
-        aria-expanded={isExpanded}
-        aria-controls={contentId}
-      >
+      <button className="mas-agent-panel__toggle" onClick={() => setIsExpanded((prev) => !prev)} aria-expanded={isExpanded} aria-controls={contentId}>
         <AngleRightIcon className={`mas-agent-panel__chevron${isExpanded ? ' mas-agent-panel__chevron--expanded' : ''}`} />
         <span className="mas-agent-panel__label">Active Agents:&nbsp;{statusText}</span>
         {runningCount > 0 && (

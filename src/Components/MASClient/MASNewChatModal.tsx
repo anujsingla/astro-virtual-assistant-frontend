@@ -33,8 +33,7 @@ const MASNewChatModal = () => {
     >
       <ModalHeader title="Start a new chat?" labelId="variant-modal-title" titleIconVariant="warning" />
       <ModalBody id="modal-box-body-variant">
-        This will close your current conversation and make it view-only. You can still view it later, but you won&apos;t be able to add new
-        messages.
+        This will close your current conversation and make it view-only. You can still view it later, but you won&apos;t be able to add new messages.
       </ModalBody>
       <ModalFooter>
         <Button key="confirm" variant="link" onClick={handleNewChat}>

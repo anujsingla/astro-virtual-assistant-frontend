@@ -9,7 +9,7 @@ import { MAS_ENABLED_FLAG } from './flags';
 import MASFooter from '../Components/MASClient/MASFooter';
 import MASMessageEntry from '../Components/MASClient/MASMessageEntry';
 
-const MAS_BLUEPRINT_ID = "48d8d52a-edc3-474f-8630-d20160fc2082";
+const MAS_BLUEPRINT_ID = '48d8d52a-edc3-474f-8630-d20160fc2082';
 
 export function useMasAuthenticated() {
   const flagEnabled = useFlag(MAS_ENABLED_FLAG);
@@ -79,8 +79,7 @@ function useMasClient(): UseManagerHook {
       streamMessages: true,
       modelName: 'Multi-Agent System',
       selectionTitle: 'Multi-Agent System',
-      selectionDescription:
-        'Interact with an AI-powered multi-agent system for complex tasks, workflows, and automated assistance.',
+      selectionDescription: 'Interact with an AI-powered multi-agent system for complex tasks, workflows, and automated assistance.',
       stateManager,
       FooterComponent: MASFooter,
       MessageEntryComponent: MASMessageEntry,

@@ -5,6 +5,7 @@ export enum Models {
   ASK_RED_HAT = 'Ask Red Hat',
   RHEL_LIGHTSPEED = 'RHEL Lightspeed',
   VA = 'Virtual Assistant',
+  OAI = 'OpenShift assisted Installer',
   HCC_AI = 'HCC AI Assistant',
   MAS = 'Multi-Agent System',
 }

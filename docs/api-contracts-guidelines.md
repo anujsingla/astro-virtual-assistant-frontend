@@ -47,6 +47,7 @@ Managers are registered in `src/aiClients/useStateManager.ts`. The **first** ena
 2. VA (Virtual Assistant)
 3. RHEL Lightspeed
 4. HCC AI
+5. MAS (Multi-Agent System)
 
 When adding a new service, place it in the `stateManagers` array at the desired priority position.
 

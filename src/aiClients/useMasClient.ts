@@ -9,7 +9,7 @@ import { MAS_ENABLED_FLAG } from './flags';
 import MASFooter from '../Components/MASClient/MASFooter';
 import MASMessageEntry from '../Components/MASClient/MASMessageEntry';
 
-const MAS_BLUEPRINT_ID = '48d8d52a-edc3-474f-8630-d20160fc2082';
+const MAS_BLUEPRINT_ID = 'c1bf8e6b-64bf-4653-9d6a-ef4d8a8cfcb3';
 
 export function useMasAuthenticated() {
   const flagEnabled = useFlag(MAS_ENABLED_FLAG);

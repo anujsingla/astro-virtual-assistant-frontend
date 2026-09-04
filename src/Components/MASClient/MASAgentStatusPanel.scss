@@ -1,0 +1,81 @@
+// aligns agent rows with the label text (chevron width + flex gap)
+$chevron-offset: calc(1em + var(--pf-t--global--spacer--sm));
+
+.mas-agent-panel {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--pf-t--global--border--color--default);
+  background-color: var(--pf-t--global--background--color--secondary--default);
+  margin-block: var(--pf-t--global--spacer--xs);
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--pf-t--global--spacer--sm);
+    width: 100%;
+    padding: var(--pf-t--global--spacer--xs) var(--pf-t--global--spacer--md);
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    font-size: var(--pf-t--global--font--size--sm);
+    font-weight: var(--pf-t--global--font--weight--body--bold);
+    color: var(--pf-t--global--text--color--regular);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--pf-t--global--background--color--secondary--hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-t--global--border--color--status--info--default);
+      outline-offset: -2px;
+    }
+
+    .mas-agent-panel__chevron {
+      transition: transform 0.2s ease;
+      color: var(--pf-t--global--icon--color--subtle);
+      flex-shrink: 0;
+
+      &--expanded {
+        transform: rotate(90deg);
+      }
+    }
+
+    .mas-agent-panel__label {
+      flex: 1;
+    }
+
+    .mas-agent-panel__spinner {
+      margin-inline-start: var(--pf-t--global--spacer--md);
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__agents {
+    border-top: 1px solid var(--pf-t--global--border--color--default);
+    padding: var(--pf-t--global--spacer--xs) var(--pf-t--global--spacer--md) var(--pf-t--global--spacer--sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pf-t--global--spacer--xs);
+  }
+
+  &__agent {
+    display: flex;
+    align-items: center;
+    gap: var(--pf-t--global--spacer--sm);
+    padding-inline-start: $chevron-offset;
+    padding-block: 2px;
+    font-size: var(--pf-t--global--font--size--sm);
+    color: var(--pf-t--global--text--color--regular);
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      width: 1em;
+    }
+  }
+}

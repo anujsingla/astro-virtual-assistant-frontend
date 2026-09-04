@@ -6,6 +6,7 @@ export enum Models {
   RHEL_LIGHTSPEED = 'RHEL Lightspeed',
   VA = 'Virtual Assistant',
   HCC_AI = 'HCC AI Assistant',
+  MAS = 'Multi-Agent System',
 }
 
 export interface WelcomeButton {

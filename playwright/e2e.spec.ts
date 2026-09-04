@@ -116,7 +116,7 @@ test.describe('Virtual Assistant - E2E Tests', () => {
     await expect(chatbot).toBeVisible();
 
     // Step 3: Determine expected default model based on configuration
-    // Default is the first available manager in order: ARH -> VA -> RHEL -> HCC AI
+    // Default is the first available manager in order: ARH -> VA -> RHEL -> HCC AI  -> Assisted Installer
     let expectedDefault = 'Hybrid Cloud Console'; // VA is always available (no flags/auth required)
 
     if (assistantConfig.isArhEnabled && assistantConfig.isArhAuthenticated) {

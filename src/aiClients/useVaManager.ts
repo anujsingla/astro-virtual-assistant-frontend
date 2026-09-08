@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useFlag } from '@unleash/proxy-client-react';
 import { Models, UseManagerHook, WelcomeConfig } from './types';
 import VAClient from './vaClient';
 import { Events, createClientStateManager } from '@redhat-cloud-services/ai-client-state';
 import VAMessageEntry from '../Components/VAClient/VAMessageEntry';
+import { VA_ENABLED_FLAG } from './flags';
 
 export default function useVaManager(): UseManagerHook {
+  const isEnabled = useFlag(VA_ENABLED_FLAG);
+
   const [welcomeConfig, setWelcomeConfig] = useState<WelcomeConfig | undefined>(undefined);
 
   const stateManager = useMemo(() => {
@@ -63,6 +67,10 @@ export default function useVaManager(): UseManagerHook {
     }),
     [stateManager, welcomeConfig]
   );
+
+  if (!isEnabled) {
+    return { manager: null, loading: false };
+  }
 
   return { manager, loading: false };
 }

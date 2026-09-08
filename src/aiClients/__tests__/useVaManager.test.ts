@@ -30,11 +30,18 @@ jest.mock('../../Components/VAClient/VAMessageEntry', () => ({
   default: () => null,
 }));
 
+// Track useFlag return value
+let mockUseFlagReturn = false;
+jest.mock('@unleash/proxy-client-react', () => ({
+  useFlag: jest.fn(() => mockUseFlagReturn),
+}));
+
 describe('useVaManager', () => {
   let mockClient: jest.Mocked<VAClient>;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseFlagReturn = false;
 
     // Create mock client instance
     mockClient = {
@@ -52,12 +59,27 @@ describe('useVaManager', () => {
     mockStateManager.getClient.mockReturnValue(mockClient);
   });
 
-  it('should initialize with default configuration', () => {
-    const { result } = renderHook(() => useVaManager());
+  describe('when feature flag is off', () => {
+    it('should return null manager', () => {
+      const { result } = renderHook(() => useVaManager());
 
-    expect(result.current.manager?.model).toBe(Models.VA);
-    expect(result.current.manager?.historyManagement).toBe(false);
-    expect(result.current.manager?.streamMessages).toBe(false);
-    expect(result.current.manager?.welcome).toBeDefined();
+      expect(result.current.manager).toBeNull();
+      expect(result.current.loading).toBe(false);
+    });
+  });
+
+  describe('when feature flag is on', () => {
+    beforeEach(() => {
+      mockUseFlagReturn = true;
+    });
+
+    it('should initialize with default configuration', () => {
+      const { result } = renderHook(() => useVaManager());
+
+      expect(result.current.manager?.model).toBe(Models.VA);
+      expect(result.current.manager?.historyManagement).toBe(false);
+      expect(result.current.manager?.streamMessages).toBe(false);
+      expect(result.current.manager?.welcome).toBeDefined();
+    });
   });
 });

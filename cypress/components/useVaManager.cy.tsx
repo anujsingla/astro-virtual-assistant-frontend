@@ -3,6 +3,7 @@ import { ScalprumProvider } from '@scalprum/react-core';
 import { FlagProvider } from '@unleash/proxy-client-react';
 import useVaManager from '../../src/aiClients/useVaManager';
 import { Models } from '../../src/aiClients/types';
+import { VA_ENABLED_FLAG } from '../../src/aiClients/flags';
 import { mockChromeApi } from '../mocks/chromeApi';
 
 const UseVaManagerComponent = () => {
@@ -11,6 +12,7 @@ const UseVaManagerComponent = () => {
   return (
     <div>
       <div data-testid="loading">{String(loading)}</div>
+      <div data-testid="has-manager">{String(!!manager)}</div>
       <div data-testid="model">{manager?.model}</div>
       <div data-testid="model-name">{manager?.modelName}</div>
       <div data-testid="selection-title">{manager?.selectionTitle}</div>
@@ -25,10 +27,10 @@ const UseVaManagerComponent = () => {
   );
 };
 
-const mountComponent = () => {
+const mountWithFlags = (toggles: Array<{ name: string; enabled: boolean }>) => {
   cy.intercept('GET', '**/api/frontend**', {
     statusCode: 200,
-    body: { toggles: [] },
+    body: { toggles },
   }).as('unleashAPI');
 
   cy.intercept('POST', '**/api/frontend/client/metrics', {
@@ -52,29 +54,45 @@ const mountComponent = () => {
 };
 
 describe('useVaManager', () => {
-  beforeEach(() => {
-    mountComponent();
+  describe('when feature flag is off', () => {
+    beforeEach(() => {
+      mountWithFlags([]);
+    });
+
+    it('should return null manager', () => {
+      cy.get('[data-testid="has-manager"]').should('contain', 'false');
+    });
+
+    it('should not be loading', () => {
+      cy.get('[data-testid="loading"]').should('contain', 'false');
+    });
   });
 
-  it('should return VA model configuration', () => {
-    cy.get('[data-testid="model"]').should('contain', Models.VA);
-    cy.get('[data-testid="model-name"]').should('contain', 'Hybrid Cloud Console - Virtual Assistant');
-    cy.get('[data-testid="selection-title"]').should('contain', 'Hybrid Cloud Console');
-  });
+  describe('when feature flag is on', () => {
+    beforeEach(() => {
+      mountWithFlags([{ name: VA_ENABLED_FLAG, enabled: true }]);
+    });
 
-  it('should use VAMessageEntry component', () => {
-    cy.get('[data-testid="has-message-entry"]').should('contain', 'true');
-  });
+    it('should return VA model configuration', () => {
+      cy.get('[data-testid="model"]').should('contain', Models.VA);
+      cy.get('[data-testid="model-name"]').should('contain', 'Hybrid Cloud Console - Virtual Assistant');
+      cy.get('[data-testid="selection-title"]').should('contain', 'Hybrid Cloud Console');
+    });
 
-  it('should have a state manager', () => {
-    cy.get('[data-testid="has-state-manager"]').should('contain', 'true');
-  });
+    it('should use VAMessageEntry component', () => {
+      cy.get('[data-testid="has-message-entry"]').should('contain', 'true');
+    });
 
-  it('should not stream messages', () => {
-    cy.get('[data-testid="stream-messages"]').should('contain', 'false');
-  });
+    it('should have a state manager', () => {
+      cy.get('[data-testid="has-state-manager"]').should('contain', 'true');
+    });
 
-  it('should not manage history', () => {
-    cy.get('[data-testid="history-management"]').should('contain', 'false');
+    it('should not stream messages', () => {
+      cy.get('[data-testid="stream-messages"]').should('contain', 'false');
+    });
+
+    it('should not manage history', () => {
+      cy.get('[data-testid="history-management"]').should('contain', 'false');
+    });
   });
 });

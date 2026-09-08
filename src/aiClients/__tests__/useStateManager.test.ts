@@ -216,13 +216,7 @@ describe('useStateManager', () => {
     renderHook(() => useStateManager(true));
 
     const modules = mockAddHook.mock.calls.map(([arg]: [{ module: string }]) => arg.module);
-    expect(modules).toEqual([
-      './useArhChatbot',
-      './useVaChatbot',
-      './useHccAiChatbot',
-      './useMasChatbot',
-      './useRhelChatbot',
-    ]);
+    expect(modules).toEqual(['./useArhChatbot', './useVaChatbot', './useHccAiChatbot', './useMasChatbot', './useRhelChatbot']);
   });
 
   it('registers in order VA, HCC AI, MAS, ARH, RHEL when arh-default is OFF', () => {
@@ -231,13 +225,7 @@ describe('useStateManager', () => {
     renderHook(() => useStateManager(true));
 
     const modules = mockAddHook.mock.calls.map(([arg]: [{ module: string }]) => arg.module);
-    expect(modules).toEqual([
-      './useVaChatbot',
-      './useHccAiChatbot',
-      './useMasChatbot',
-      './useArhChatbot',
-      './useRhelChatbot',
-    ]);
+    expect(modules).toEqual(['./useVaChatbot', './useHccAiChatbot', './useMasChatbot', './useArhChatbot', './useRhelChatbot']);
   });
 
   describe('when VA is unavailable (arh-default OFF)', () => {

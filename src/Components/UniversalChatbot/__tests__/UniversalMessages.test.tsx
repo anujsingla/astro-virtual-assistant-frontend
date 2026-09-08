@@ -52,8 +52,8 @@ jest.mock('../../ARHClient/useArhMessageQuota', () => jest.fn());
 // Mock UniversalBanner component
 jest.mock('../UniversalBanner', () => ({
   __esModule: true,
-  default: function MockUniversalBanner(props: any) {
-    return <div data-testid="universal-banner" {...props} />;
+  default: function MockUniversalBanner({ isOpen, setOpen, ...rest }: any) {
+    return <div data-testid="universal-banner" {...rest} />;
   },
 }));
 

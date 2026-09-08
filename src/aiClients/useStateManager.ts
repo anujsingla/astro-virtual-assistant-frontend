@@ -13,7 +13,7 @@ function useAsyncManagers(): StateManagerConfiguration<IAIClient>[] | undefined 
   const arhDefaultFlag = useFlag(ARH_DEFAULT_FLAG);
   useEffect(() => {
     if (arhDefaultFlag) {
-      // ARH first in dropdown (current behavior)
+      // ARH first in dropdown when ARH Default flag is on
       addHook({
         scope: 'virtualAssistant',
         module: './useArhChatbot',
@@ -23,11 +23,21 @@ function useAsyncManagers(): StateManagerConfiguration<IAIClient>[] | undefined 
         module: './useVaChatbot',
       });
     } else {
-      // VA first in dropdown
+      // VA first in dropdown when ARH Default flag is off
       addHook({
         scope: 'virtualAssistant',
         module: './useVaChatbot',
       });
+    }
+    addHook({
+      scope: 'virtualAssistant',
+      module: './useHccAiChatbot',
+    });
+    addHook({
+      scope: 'virtualAssistant',
+      module: './useMasChatbot',
+    });
+    if (!arhDefaultFlag) {
       addHook({
         scope: 'virtualAssistant',
         module: './useArhChatbot',
@@ -36,14 +46,6 @@ function useAsyncManagers(): StateManagerConfiguration<IAIClient>[] | undefined 
     addHook({
       scope: 'virtualAssistant',
       module: './useRhelChatbot',
-    });
-    addHook({
-      scope: 'virtualAssistant',
-      module: './useHccAiChatbot',
-    });
-    addHook({
-      scope: 'virtualAssistant',
-      module: './useMasChatbot',
     });
     return cleanup;
   }, [addHook, arhDefaultFlag]);

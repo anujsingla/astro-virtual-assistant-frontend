@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import useStateManager from '../useStateManager';
 import { useLocation } from 'react-router-dom';
 import { VirtualAssistantStateSingleton } from '../../utils/VirtualAssistantStateSingleton';
+import { Models } from '../types';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -33,6 +34,22 @@ const mockUseFlag = jest.fn();
 jest.mock('@unleash/proxy-client-react', () => ({
   useFlag: (flag: string) => mockUseFlag(flag),
 }));
+
+const createManagerHookResult = (id: string, model: Models | null) => ({
+  id,
+  loading: false,
+  error: null,
+  hookResult: {
+    manager: model
+      ? {
+          model,
+          stateManager: createStateManager(),
+          historyManagement: true,
+          streamMessages: true,
+        }
+      : null,
+  },
+});
 
 describe('useStateManager', () => {
   beforeEach(() => {
@@ -106,20 +123,6 @@ describe('useStateManager', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    expect(result.current.currentModel).toBe('Ask Red Hat');
-  });
-
-  it('handles failed module by not blocking initialization', async () => {
-    // Enable chatbot so the hook proceeds to compute a model
-    mockUseFlag.mockReturnValue(true);
-
-    const { result } = renderHook(() => useStateManager(true));
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    // Even though one module failed, the hook should still select the ARH model
     expect(result.current.currentModel).toBe('Ask Red Hat');
   });
 
@@ -207,29 +210,119 @@ describe('useStateManager', () => {
     expect(result.current.currentModel).toBe('Ask Red Hat');
   });
 
-  it('registers ARH before VA when arh-default flag is ON', () => {
+  it('registers in order ARH, VA, HCC AI, MAS, RHEL when arh-default is ON', () => {
     mockUseFlag.mockReturnValue(true);
 
     renderHook(() => useStateManager(true));
 
     const modules = mockAddHook.mock.calls.map(([arg]: [{ module: string }]) => arg.module);
-    const arhIndex = modules.indexOf('./useArhChatbot');
-    const vaIndex = modules.indexOf('./useVaChatbot');
-    expect(arhIndex).toBeGreaterThanOrEqual(0);
-    expect(vaIndex).toBeGreaterThanOrEqual(0);
-    expect(arhIndex).toBeLessThan(vaIndex);
+    expect(modules).toEqual([
+      './useArhChatbot',
+      './useVaChatbot',
+      './useHccAiChatbot',
+      './useMasChatbot',
+      './useRhelChatbot',
+    ]);
   });
 
-  it('registers VA before ARH when arh-default flag is OFF', () => {
+  it('registers in order VA, HCC AI, MAS, ARH, RHEL when arh-default is OFF', () => {
     mockUseFlag.mockReturnValue(false);
 
     renderHook(() => useStateManager(true));
 
     const modules = mockAddHook.mock.calls.map(([arg]: [{ module: string }]) => arg.module);
-    const arhIndex = modules.indexOf('./useArhChatbot');
-    const vaIndex = modules.indexOf('./useVaChatbot');
-    expect(arhIndex).toBeGreaterThanOrEqual(0);
-    expect(vaIndex).toBeGreaterThanOrEqual(0);
-    expect(vaIndex).toBeLessThan(arhIndex);
+    expect(modules).toEqual([
+      './useVaChatbot',
+      './useHccAiChatbot',
+      './useMasChatbot',
+      './useArhChatbot',
+      './useRhelChatbot',
+    ]);
+  });
+
+  describe('when VA is unavailable (arh-default OFF)', () => {
+    beforeEach(() => {
+      mockUseFlag.mockReturnValue(false);
+    });
+
+    it('selects HCC AI as default when all services are available', async () => {
+      // Registration order (arh-default OFF): VA, HCC AI, MAS, ARH, RHEL
+      // After VA filtered out: HCC AI, MAS, ARH, RHEL → managers[0] = HCC AI
+      mockHookResults.length = 0;
+      mockHookResults.push(
+        createManagerHookResult('va', null),
+        createManagerHookResult('hcc-ai', Models.HCC_AI),
+        createManagerHookResult('mas', Models.MAS),
+        createManagerHookResult('arh', Models.ASK_RED_HAT),
+        createManagerHookResult('rhel', Models.RHEL_LIGHTSPEED)
+      );
+
+      const { result } = renderHook(() => useStateManager(true));
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(result.current.currentModel).toBe(Models.HCC_AI);
+    });
+
+    it('selects MAS when HCC AI is also unavailable', async () => {
+      mockHookResults.length = 0;
+      mockHookResults.push(
+        createManagerHookResult('va', null),
+        createManagerHookResult('hcc-ai', null),
+        createManagerHookResult('mas', Models.MAS),
+        createManagerHookResult('arh', Models.ASK_RED_HAT),
+        createManagerHookResult('rhel', Models.RHEL_LIGHTSPEED)
+      );
+
+      const { result } = renderHook(() => useStateManager(true));
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(result.current.currentModel).toBe(Models.MAS);
+    });
+
+    it('selects ARH when HCC AI and MAS are also unavailable', async () => {
+      mockHookResults.length = 0;
+      mockHookResults.push(
+        createManagerHookResult('va', null),
+        createManagerHookResult('hcc-ai', null),
+        createManagerHookResult('mas', null),
+        createManagerHookResult('arh', Models.ASK_RED_HAT),
+        createManagerHookResult('rhel', Models.RHEL_LIGHTSPEED)
+      );
+
+      const { result } = renderHook(() => useStateManager(true));
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(result.current.currentModel).toBe(Models.ASK_RED_HAT);
+    });
+
+    it('reselects to HCC AI when current model (VA) becomes unavailable', async () => {
+      VirtualAssistantStateSingleton.setCurrentModel(Models.VA);
+
+      mockHookResults.length = 0;
+      mockHookResults.push(
+        createManagerHookResult('va', null),
+        createManagerHookResult('hcc-ai', Models.HCC_AI),
+        createManagerHookResult('mas', Models.MAS),
+        createManagerHookResult('arh', Models.ASK_RED_HAT),
+        createManagerHookResult('rhel', Models.RHEL_LIGHTSPEED)
+      );
+
+      const { result } = renderHook(() => useStateManager(true));
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(result.current.currentModel).toBe(Models.HCC_AI);
+    });
   });
 });

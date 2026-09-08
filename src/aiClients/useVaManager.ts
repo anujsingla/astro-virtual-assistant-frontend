@@ -19,6 +19,10 @@ export default function useVaManager(): UseManagerHook {
 
   // Watch for client initialization to update welcome content using state manager events
   useEffect(() => {
+    if (!isEnabled) {
+      return;
+    }
+
     const client = stateManager.getClient();
 
     const updateContent = () => {
@@ -45,7 +49,7 @@ export default function useVaManager(): UseManagerHook {
       unsubscribeInit();
       unsubscribeConversation();
     };
-  }, [stateManager]);
+  }, [stateManager, isEnabled]);
 
   const manager = useMemo(
     () => ({
